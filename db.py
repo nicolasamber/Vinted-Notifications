@@ -418,3 +418,51 @@ def get_items_per_day():
     finally:
         if conn:
             conn.close()
+
+
+import sqlite3
+
+def create_tables():
+    conn = sqlite3.connect('vinted.db')
+    cursor = conn.cursor()
+
+    # Table des requêtes de recherche
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS queries (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            query TEXT NOT NULL
+        )
+    ''')
+
+    # Table des paramètres
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS parameters (
+            key TEXT PRIMARY KEY,
+            value TEXT
+        )
+    ''')
+
+    # Table des items trouvés
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS items (
+            id INTEGER PRIMARY KEY,
+            title TEXT,
+            price TEXT,
+            currency TEXT,
+            timestamp INTEGER,
+            query TEXT,
+            photo_url TEXT
+        )
+    ''')
+
+    # Table de la allowlist par pays
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS allowlist (
+            country TEXT PRIMARY KEY
+        )
+    ''')
+
+    conn.commit()
+    conn.close()
+    print("✅ Tables SQLite créées avec succès.")
+
